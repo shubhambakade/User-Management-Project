@@ -82,8 +82,13 @@ public class UserServiceImpl implements UserServiceI {
 
 	@Override
 	public Map<Integer, String> getCities(Integer stateId) {
+       List<CityMasterEntity> findbystateid= cityRepo.findByStateId(stateId);
+       Map<Integer, String> cityMap = new HashMap<>();
+       findbystateid.forEach(city -> {
+    	   cityMap.put(city.getCityId(), city.getCityName());
+       });
        
-		return null;
+		return cityMap;
 	}
 
 	@Override
