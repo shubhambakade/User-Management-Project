@@ -1,5 +1,7 @@
 package com.usermanagementproject.service;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import com.usermanagementproject.binding.LoginForm;
 import com.usermanagementproject.binding.UnlockAccForm;
 import com.usermanagementproject.binding.UserForm;
 import com.usermanagementproject.constants.AppConstants;
+import com.usermanagementproject.model.CountryMasterEntity;
 import com.usermanagementproject.model.StateMasterEntity;
 import com.usermanagementproject.model.UserMasterEntity;
 import com.usermanagementproject.props.AppProperties;
@@ -57,8 +60,13 @@ public class UserServiceImpl implements UserServiceI {
 
 	@Override
 	public Map<Integer, String> getContries() {
-		// TODO Auto-generated method stub
-		return null;
+           List<CountryMasterEntity> findall=countryRepo.findAll();
+           Map<Integer, String> countriesmap = new HashMap<>();
+           
+           findall.forEach(country ->{
+        	   countriesmap.put(country.getCountryId(),country.getCountryName());
+           });
+		return countriesmap;
 	}
 
 	@Override
