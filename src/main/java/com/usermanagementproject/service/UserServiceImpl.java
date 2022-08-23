@@ -2,19 +2,57 @@ package com.usermanagementproject.service;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.usermanagementproject.binding.LoginForm;
 import com.usermanagementproject.binding.UnlockAccForm;
 import com.usermanagementproject.binding.UserForm;
+import com.usermanagementproject.constants.AppConstants;
+import com.usermanagementproject.model.StateMasterEntity;
+import com.usermanagementproject.model.UserMasterEntity;
+import com.usermanagementproject.props.AppProperties;
+import com.usermanagementproject.repository.CityRepository;
+import com.usermanagementproject.repository.CountryRepository;
+import com.usermanagementproject.repository.StateRepository;
+import com.usermanagementproject.repository.UserRepository;
+import com.usermanagementproject.util.EmailUtils;
+
+import ch.qos.logback.core.status.Status;
 
 @Service
 public class UserServiceImpl implements UserServiceI {
 
+	 @Autowired
+	 private UserRepository userRepo;
+	 @Autowired
+	 private CountryRepository countryRepo;
+	 @Autowired
+	 private StateRepository stateRepo;
+	 @Autowired
+	 private CityRepository cityRepo;
+	 @Autowired
+	 private EmailUtils emailUtils;
+	 
+	 private AppProperties appProp;
+	 
+	
 	@Override
 	public String logincheck(LoginForm loginForm) {
-		// TODO Auto-generated method stub
-		return null;
+         UserMasterEntity userAcc= userRepo.findByEmailAndPassword(loginForm.getEmail(),loginForm.getPassword());
+         
+         if (userAcc != null) {
+			
+        	 String status = userAcc.getAccountStatus();
+        	 
+        	  if (status.equals(AppConstants.LOCKED)) {
+				  return appProp.getMessages().get(AppConstants.ACCOUNT_LOCKED);
+			} else {
+                  return AppConstants.SUCCESS;
+			}
+		} else {
+                return appProp.getMessages().get(AppConstants.INVALID_CREDENTIALS);
+		}
 	}
 
 	@Override
