@@ -11,6 +11,7 @@ import com.usermanagementproject.binding.LoginForm;
 import com.usermanagementproject.binding.UnlockAccForm;
 import com.usermanagementproject.binding.UserForm;
 import com.usermanagementproject.constants.AppConstants;
+import com.usermanagementproject.model.CityMasterEntity;
 import com.usermanagementproject.model.CountryMasterEntity;
 import com.usermanagementproject.model.StateMasterEntity;
 import com.usermanagementproject.model.UserMasterEntity;
@@ -71,13 +72,17 @@ public class UserServiceImpl implements UserServiceI {
 
 	@Override
 	public Map<Integer, String> getStates(Integer countryId) {
-		// TODO Auto-generated method stub
-		return null;
+        List<StateMasterEntity> findbycountryid= stateRepo.findByCountryId(countryId);
+        Map<Integer, String> stateMap = new HashMap<>();
+        findbycountryid.forEach(state ->{
+        	stateMap.put(state.getStateId(), state.getStateName());
+        });
+		return stateMap;
 	}
 
 	@Override
 	public Map<Integer, String> getCities(Integer stateId) {
-		// TODO Auto-generated method stub
+       
 		return null;
 	}
 
